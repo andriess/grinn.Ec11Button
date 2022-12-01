@@ -4,8 +4,8 @@ using System.Device.Gpio;
 
 Console.WriteLine("Hello, World!");
 
-const int encoderPinA = 12;
-const int encoderPinB = 11;
+const int encoderPinA = 17;
+const int encoderPinB = 18;
 
 using var controller = new GpioController();
 controller.OpenPin(encoderPinA, PinMode.Input, PinValue.High);
