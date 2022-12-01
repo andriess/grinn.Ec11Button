@@ -16,6 +16,8 @@ controller.RegisterCallbackForPinValueChangedEvent(encoderPinA,
 controller.RegisterCallbackForPinValueChangedEvent(encoderPinB, 
     PinEventTypes.Falling | PinEventTypes.Rising, OnPinEvent);
 
+await Task.Delay(Timeout.Infinite);
+
 static void OnPinEvent(object sender, PinValueChangedEventArgs args)
 {
     Console.WriteLine($"{DateTime.Now} - Pin: {args.PinNumber}, EventType: {args.ChangeType}");
