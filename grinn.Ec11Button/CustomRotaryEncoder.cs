@@ -14,6 +14,7 @@ public class CustomRotaryEncoder : QuadratureRotaryEncoder
 
     protected override void OnPulse(bool blnUp, int milliSecondsSinceLastPulse)
     {
+        Console.WriteLine($"{nameof(OnPulse)} - LastPulseCount: {_lastPulseCount}, PulseCount: {PulseCount}");
         base.OnPulse(blnUp, milliSecondsSinceLastPulse);
         
         var rotationDirection = PulseCount < _lastPulseCount ? 
