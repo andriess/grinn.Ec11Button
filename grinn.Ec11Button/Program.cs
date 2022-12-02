@@ -13,8 +13,8 @@ controller.OpenPin(encoderPinB, PinMode.Input, PinValue.High);
 
 controller.RegisterCallbackForPinValueChangedEvent(encoderPinA, 
     PinEventTypes.Falling | PinEventTypes.Rising, OnPinEvent);
-controller.RegisterCallbackForPinValueChangedEvent(encoderPinB, 
-    PinEventTypes.Falling | PinEventTypes.Rising, OnPinEvent);
+/*controller.RegisterCallbackForPinValueChangedEvent(encoderPinB, 
+    PinEventTypes.Falling | PinEventTypes.Rising, OnPinEvent);*/
 
 await Task.Delay(Timeout.Infinite);
 
