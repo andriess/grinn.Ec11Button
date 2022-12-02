@@ -1,22 +1,36 @@
-﻿using Iot.Device.RotaryEncoder;
+﻿using System.Device.Gpio;
+using Iot.Device.RotaryEncoder;
 
 namespace grinn.Ec11Button;
 
 public class CustomRotaryEncoder : QuadratureRotaryEncoder
 {
     private double _lastPulseCount;
-    
+    private int _pinC;
+    private GpioController _controller;
     public event EventHandler<RotaryEncoderDirectionArgs>? OnEncoderChange;
+    
+    public event EventHandler<bool>? OnClick;
 
-    public CustomRotaryEncoder(int pinA, int pinB, int pulsesPerRotation) : base(pinA, pinB, pulsesPerRotation)
+    public CustomRotaryEncoder(int pinA, int pinB, int pinC, int pulsesPerRotation, GpioController controller)
+        : base(pinA, pinB,PinEventTypes.Falling, pulsesPerRotation, controller)
     {
+        _controller = controller;
+        _pinC = pinC;
+        controller.OpenPin(_pinC, PinMode.Input);
+        controller.RegisterCallbackForPinValueChangedEvent(_pinC, PinEventTypes.Falling, HandleClickEvent);
+    }
+    
+    public CustomRotaryEncoder(int pinA, int pinB, int pinC, int pulsesPerRotation) 
+        : this(pinA, pinB, pinC, pulsesPerRotation, new GpioController())
+    {
+        
     }
 
     protected override void OnPulse(bool blnUp, int milliSecondsSinceLastPulse)
     {
         base.OnPulse(blnUp, milliSecondsSinceLastPulse);
         
-        Console.WriteLine($"{nameof(OnPulse)} - LastPulseCount: {_lastPulseCount}, PulseCount: {PulseCount}");
         var rotationDirection = PulseCount < _lastPulseCount ? 
             RotationDirection.Counterclockwise : RotationDirection.Clockwise;
         
@@ -25,6 +39,19 @@ public class CustomRotaryEncoder : QuadratureRotaryEncoder
         _lastPulseCount = PulseCount;
         
         OnEncoderChange?.Invoke(this, new RotaryEncoderDirectionArgs(rotationDirection));
+    }
+    
+    private void HandleClickEvent(object sender, PinValueChangedEventArgs args)
+    {
+        Console.WriteLine("Button Clicked");
+        OnClick?.Invoke(this, true);
+    }
+
+    public new void Dispose()
+    {
+        _controller.ClosePin(_pinC);
+        
+        base.Dispose();
     }
 }
 

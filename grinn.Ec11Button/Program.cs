@@ -7,17 +7,18 @@ Console.WriteLine("Hello, World!");
 
 const int encoderPinA = 17;
 const int encoderPinB = 18;
+const int encoderPinC = 27;
 
-var rotaryButton = new CustomRotaryEncoder(encoderPinA, encoderPinB, 20);
+var rotaryButton = new CustomRotaryEncoder(encoderPinA, encoderPinB, encoderPinC, 20);
 rotaryButton.Debounce = TimeSpan.FromMilliseconds(175);
-rotaryButton.PulseCountChanged += HandlePulseCountChange;
 rotaryButton.OnEncoderChange += HandleEncoderChange;
+rotaryButton.OnClick += HandleClick;
 
 await Task.Delay(Timeout.Infinite);
 
-void HandlePulseCountChange(object? sender, RotaryEncoderEventArgs args)
+void HandleClick(object? sender, bool args)
 {
-    Console.WriteLine($"{nameof(HandlePulseCountChange)} - {args.Value}");
+    Console.WriteLine($"{nameof(HandleClick)} - click event arrived in main program.");
 }
 
 void HandleEncoderChange(object? sender, RotaryEncoderDirectionArgs args)
