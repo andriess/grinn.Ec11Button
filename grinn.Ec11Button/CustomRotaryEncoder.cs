@@ -46,7 +46,7 @@ public class CustomRotaryEncoder : QuadratureRotaryEncoder
     
     private void HandleClickEvent(object sender, PinValueChangedEventArgs args)
     {
-        if ((uint)Debounce.TotalMilliseconds == 0 | _debouncer.ElapsedMilliseconds > 50)
+        if ((uint)Debounce.TotalMilliseconds == 0 | _debouncer.ElapsedMilliseconds > (uint)Debounce.TotalMilliseconds)
         {
             OnClick?.Invoke(this, true); 
         }
