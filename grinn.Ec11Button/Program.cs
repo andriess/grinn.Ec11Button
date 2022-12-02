@@ -9,7 +9,7 @@ const int encoderPinA = 17;
 const int encoderPinB = 18;
 
 var rotaryButton = new CustomRotaryEncoder(encoderPinA, encoderPinB, 20);
-rotaryButton.Debounce = TimeSpan.FromMilliseconds(250);
+rotaryButton.Debounce = TimeSpan.FromMilliseconds(100);
 rotaryButton.PulseCountChanged += HandlePulseCountChange;
 rotaryButton.OnEncoderChange += HandleEncoderChange;
 
