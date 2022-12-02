@@ -10,18 +10,19 @@ public class CustomRotaryEncoder : QuadratureRotaryEncoder
 
     public CustomRotaryEncoder(int pinA, int pinB, int pulsesPerRotation) : base(pinA, pinB, pulsesPerRotation)
     {
-        PulseCountChanged += HandlePulseCountChanged;
     }
 
-    private void HandlePulseCountChanged(object? sender, RotaryEncoderEventArgs args)
-    { 
-        var rotationDirection = args.Value < _lastPulseCount ? 
+    protected override void OnPulse(bool blnUp, int milliSecondsSinceLastPulse)
+    {
+        base.OnPulse(blnUp, milliSecondsSinceLastPulse);
+        
+        var rotationDirection = PulseCount < _lastPulseCount ? 
             RotationDirection.Counterclockwise : RotationDirection.Clockwise;
         
         // set this so on the next pulse count change we can determine if the pulse count has increased (clockwise turn)
         // or decreased (counter clockwise turn).
-        _lastPulseCount = args.Value;
-
+        _lastPulseCount = PulseCount;
+        
         OnEncoderChange?.Invoke(this, new RotaryEncoderDirectionArgs(rotationDirection));
     }
 }
