@@ -1,4 +1,5 @@
 ﻿using System.Device.Gpio;
+using System.Diagnostics;
 using Iot.Device.RotaryEncoder;
 
 namespace grinn.Ec11Button;
@@ -7,6 +8,8 @@ public class CustomRotaryEncoder : QuadratureRotaryEncoder
 {
     private double _lastPulseCount;
     private int _pinC;
+    private Stopwatch _debouncer = new Stopwatch();
+
     private GpioController _controller;
     public event EventHandler<RotaryEncoderDirectionArgs>? OnEncoderChange;
     
@@ -43,8 +46,10 @@ public class CustomRotaryEncoder : QuadratureRotaryEncoder
     
     private void HandleClickEvent(object sender, PinValueChangedEventArgs args)
     {
-        Console.WriteLine("Button Clicked");
-        OnClick?.Invoke(this, true);
+        if ((uint)Debounce.TotalMilliseconds == 0 | _debouncer.ElapsedMilliseconds > (uint)Debounce.TotalMilliseconds)
+        {
+            OnClick?.Invoke(this, true); 
+        }
     }
 
     public new void Dispose()
