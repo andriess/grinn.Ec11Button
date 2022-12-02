@@ -7,8 +7,8 @@ namespace grinn.Ec11Button;
 public class CustomRotaryEncoder : QuadratureRotaryEncoder
 {
     private double _lastPulseCount;
-    private int _pinC;
-    private Stopwatch _debouncer = new Stopwatch();
+    private readonly int _pinC;
+    private readonly Stopwatch _debouncer = new ();
 
     private GpioController _controller;
     public event EventHandler<RotaryEncoderDirectionArgs>? OnEncoderChange;
@@ -46,10 +46,12 @@ public class CustomRotaryEncoder : QuadratureRotaryEncoder
     
     private void HandleClickEvent(object sender, PinValueChangedEventArgs args)
     {
-        if ((uint)Debounce.TotalMilliseconds == 0 | _debouncer.ElapsedMilliseconds > (uint)Debounce.TotalMilliseconds)
+        if ((uint)Debounce.TotalMilliseconds == 0 | _debouncer.ElapsedMilliseconds > 50)
         {
             OnClick?.Invoke(this, true); 
         }
+        
+        _debouncer.Restart();
     }
 
     public new void Dispose()
