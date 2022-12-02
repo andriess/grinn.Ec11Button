@@ -23,6 +23,7 @@ public class CustomRotaryEncoder : QuadratureRotaryEncoder
         var rotationDirection = args.Value < _lastPulseCount ? 
             RotationDirection.Counterclockwise : RotationDirection.Clockwise;
         
+        Console.WriteLine($"{nameof(HandlePulseCountChanged)} - direction: {rotationDirection}");
         OnEncoderChange?.Invoke(this, new RotaryEncoderDirectionArgs(rotationDirection));
     }
 }
