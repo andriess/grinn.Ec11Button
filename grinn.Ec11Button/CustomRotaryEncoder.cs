@@ -5,7 +5,7 @@ namespace grinn.Ec11Button;
 public class CustomRotaryEncoder : QuadratureRotaryEncoder
 {
     private double _lastPulseCount;
-
+    
     public event EventHandler<RotaryEncoderDirectionArgs>? OnEncoderChange;
 
     public CustomRotaryEncoder(int pinA, int pinB, int pulsesPerRotation) : base(pinA, pinB, pulsesPerRotation)
