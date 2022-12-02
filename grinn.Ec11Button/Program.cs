@@ -8,15 +8,15 @@ Console.WriteLine("Hello, World!");
 const int encoderPinA = 17;
 const int encoderPinB = 18;
 
-var rotaryButton = new QuadratureRotaryEncoder(encoderPinA, encoderPinB, PinEventTypes.Falling, 20);
-rotaryButton.Debounce = TimeSpan.FromMilliseconds(10);
+var rotaryButton = new QuadratureRotaryEncoder(encoderPinA, encoderPinB, 20);
 rotaryButton.PulseCountChanged += OnPulseCountChanged;
 
 await Task.Delay(Timeout.Infinite);
 
 void OnPulseCountChanged(object? sender, RotaryEncoderEventArgs args)
 {
-    var counter = Math.Abs(args.Value - (-1)) < 0.1 ? "Counter" : string.Empty;
+    Console.WriteLine(args.Value);
+    var counter = args.Value.Equals(-1) ? "Counter" : string.Empty;
     Console.WriteLine($"{DateTime.Now} - {counter} clockwise ");
 
 }
