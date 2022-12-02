@@ -18,7 +18,11 @@ controller.RegisterCallbackForPinValueChangedEvent(encoderPinB,
 
 await Task.Delay(Timeout.Infinite);
 
-static void OnPinEvent(object sender, PinValueChangedEventArgs args)
+void OnPinEvent(object sender, PinValueChangedEventArgs args)
 {
-    Console.WriteLine($"{DateTime.Now} - Pin: {args.PinNumber}, EventType: {args.ChangeType}");
+    var otherPin = args.PinNumber == encoderPinA ? encoderPinA : encoderPinB;
+    var otherPinValue = controller.Read(otherPin);
+    var currentPinValue = controller.Read(args.PinNumber);
+
+    Console.WriteLine($"{DateTime.Now} - Pin: {args.PinNumber}, EventType: {args.ChangeType}, CurrentPinValue: {currentPinValue}, OtherPinValue: {otherPinValue}");
 }
