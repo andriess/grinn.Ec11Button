@@ -25,4 +25,5 @@ void OnPinEvent(object sender, PinValueChangedEventArgs args)
     var currentPinValue = controller.Read(args.PinNumber);
 
     Console.WriteLine($"{DateTime.Now} - Pin: {args.PinNumber}, EventType: {args.ChangeType}, CurrentPinValue: {currentPinValue}, OtherPinValue: {otherPinValue}");
+    Task.Delay(10);
 }
