@@ -20,7 +20,7 @@ rotaryButton.OnClick += HandleClick;
 // Trying some MPD stuff here: 
 const string unixSocketPath = "/var/run/mpd/socket";
 
-using var socket = new Socket(AddressFamily.Unix, SocketType.Stream, ProtocolType.Tcp);
+using var socket = new Socket(AddressFamily.Unix, SocketType.Stream, ProtocolType.IP);
 var endpoint = new UnixDomainSocketEndPoint(unixSocketPath);
 await socket.ConnectAsync(endpoint);
 
