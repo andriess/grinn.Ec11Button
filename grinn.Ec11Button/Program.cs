@@ -41,6 +41,9 @@ static async Task<string> ReceiveResponseFromSocket(Socket socket, byte[] receiv
             throw new ArgumentNullException(nameof(socket), "Socket cannot be null.");
     #endregion
     
+    Array.Clear(receivedBytes);
+    Array.Clear(receivedChars);
+    
     var bytesReceived = await socket.ReceiveAsync(receivedBytes, SocketFlags.None);
     
     Console.WriteLine($"{nameof(ReceiveResponseFromSocket)} - Bytes received: {bytesReceived}");
