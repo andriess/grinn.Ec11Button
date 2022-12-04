@@ -42,7 +42,8 @@ static async Task<string> ReceiveResponseFromSocket(Socket socket, byte[] receiv
     #endregion
     
     var bytesReceived = await socket.ReceiveAsync(receivedBytes, SocketFlags.None);
-
+    
+    Console.WriteLine($"{nameof(ReceiveResponseFromSocket)} - Bytes received: {bytesReceived}");
     // Convert byteCount bytes to ASCII characters using the 'responseChars' buffer as destination
     Encoding.ASCII.GetChars(receivedBytes, 0, bytesReceived, receivedChars, 0);
 
