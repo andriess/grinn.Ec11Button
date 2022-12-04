@@ -18,6 +18,12 @@ using var socket = new Socket(AddressFamily.Unix, SocketType.Stream, ProtocolTyp
 var endpoint = new UnixDomainSocketEndPoint(unixSocketPath);
 await socket.ConnectAsync(endpoint);
 
+// My single button code. This should move somewhere smarter once we start orchestrating our gui+controls
+var rotaryButton = new CustomRotaryEncoder(encoderPinA, encoderPinB, encoderPinC, 20);
+rotaryButton.Debounce = TimeSpan.FromMilliseconds(175);
+rotaryButton.OnEncoderChange += HandleEncoderChange;
+rotaryButton.OnClick += HandleClick;
+
 var receivedBytes = new byte[256];
 var receivedChars = new char[256];
 while (true)
@@ -32,25 +38,6 @@ while (true)
     // Print the contents of the 'responseChars' buffer to Console.Out
     await Console.Out.WriteAsync(receivedChars.AsMemory(0, charCount));
 }
-
-// My single button code. This should move somewhere smarter once we start orchestrating our gui+controls
-var rotaryButton = new CustomRotaryEncoder(encoderPinA, encoderPinB, encoderPinC, 20);
-rotaryButton.Debounce = TimeSpan.FromMilliseconds(175);
-rotaryButton.OnEncoderChange += HandleEncoderChange;
-rotaryButton.OnClick += HandleClick;
-
-/*var mpdEndpoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 6600);
-var tcpClient = new TcpClient();
-await tcpClient.ConnectAsync(mpdEndpoint);
-
-var connectionStream = tcpClient.GetStream();
-var reader = new StreamReader(connectionStream, Encoding.ASCII);
-var writer = new StreamWriter(connectionStream, Encoding.ASCII) { NewLine = "\n"};
-
-var isConnected = reader.ReadLine();
-var version = isConnected?[7..];*/
-
-await Task.Delay(Timeout.Infinite);
 
 void HandleClick(object? sender, bool args)
 {
