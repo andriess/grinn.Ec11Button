@@ -29,7 +29,7 @@ var receivedChars = new char[256];
 var onConnectedResponse = await ReceiveResponseFromSocket(socket, receivedBytes, receivedChars);
 Console.WriteLine(onConnectedResponse);
 
-SendCommandToSocket(socket, "ping");
+SendCommandToSocket(socket, "ping\n");
 
 var onPingResponse = await ReceiveResponseFromSocket(socket, receivedBytes, receivedChars);
 Console.WriteLine(onPingResponse);
