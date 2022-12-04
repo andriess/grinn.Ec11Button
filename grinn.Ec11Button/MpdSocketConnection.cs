@@ -5,18 +5,16 @@ namespace grinn.Ec11Button;
 
 public class MpdSocketConnection
 {
-    private static readonly byte[] ReceivedBytes = new byte[256];
-    private static readonly char[] ReceivedChars = new char[256];
+    private static readonly byte[] ReceivedBytes = new byte[2048];
+    private static readonly char[] ReceivedChars = new char[2048];
 
-    private static string _socketPath;
     private readonly Socket _socket;
     private readonly UnixDomainSocketEndPoint _endpoint;
 
     public MpdSocketConnection(string socketPath)
     {
-        _socketPath = socketPath;
         _socket = new Socket(AddressFamily.Unix, SocketType.Stream, ProtocolType.IP);
-        _endpoint = new UnixDomainSocketEndPoint(_socketPath);
+        _endpoint = new UnixDomainSocketEndPoint(socketPath);
     }
 
     public async Task Connect()

@@ -16,12 +16,9 @@ rotaryButton.OnClick += HandleClick;
 
 // Trying some MPD stuff here: 
 var mpdConnection = new MpdSocketConnection("/var/run/mpd/socket");
+
 var result = await mpdConnection.SendCommandToSocket("ping\n");
-
-Console.WriteLine(result);
-
 var playlistInfo = await mpdConnection.SendCommandToSocket("playlistinfo\n");
-Console.WriteLine(playlistInfo);
 
 void HandleClick(object? sender, bool args)
 {
