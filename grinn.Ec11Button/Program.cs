@@ -32,7 +32,7 @@ Console.WriteLine(onConnectedResponse);
 SendCommandToSocket(socket, "ping\n");
 
 var onPingResponse = await ReceiveResponseFromSocket(socket, receivedBytes, receivedChars);
-Console.WriteLine(onPingResponse);
+Console.WriteLine($"Program - OnPingResponse: {onPingResponse}");
 
 static async Task<string> ReceiveResponseFromSocket(Socket socket, byte[] receivedBytes, char[] receivedChars)
 {
@@ -44,13 +44,18 @@ static async Task<string> ReceiveResponseFromSocket(Socket socket, byte[] receiv
     Array.Clear(receivedBytes);
     Array.Clear(receivedChars);
     
+    Console.WriteLine($"{nameof(ReceiveResponseFromSocket)} - ReceivedBytes Size: {receivedBytes.Length}, ReceivedChars Size: {receivedChars.Length}");
+    
     var bytesReceived = await socket.ReceiveAsync(receivedBytes, SocketFlags.None);
     
     Console.WriteLine($"{nameof(ReceiveResponseFromSocket)} - Bytes received: {bytesReceived}");
     // Convert byteCount bytes to ASCII characters using the 'responseChars' buffer as destination
     Encoding.ASCII.GetChars(receivedBytes, 0, bytesReceived, receivedChars, 0);
 
-    return new string(receivedChars);
+    var responseString = new string(receivedChars);
+    Console.WriteLine($"{nameof(ReceiveResponseFromSocket)} - Response string: {responseString}");
+
+    return responseString;
 }
 
 static void SendCommandToSocket(Socket socket, string command)
