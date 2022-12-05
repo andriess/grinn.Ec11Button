@@ -71,7 +71,7 @@ public class St7789
             gpioController.OpenPin(backlight.Value, PinMode.Output);
             gpioController.Write(backlight.Value, PinValue.Low);
             Task.Delay(TimeSpan.FromMilliseconds(100));
-            gpioController.Write(backlight.Value, PinValue.High);
+            //gpioController.Write(backlight.Value, PinValue.High);
         }
         
         Init();
