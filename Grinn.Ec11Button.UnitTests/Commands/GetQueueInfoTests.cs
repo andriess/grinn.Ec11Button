@@ -48,12 +48,12 @@ public class GetQueueInfoTests
         result[1].Path.Should().Be("http://stream-sd.radioparadise.com:8056");
         result[1].Id.Should().Be(2);
         result[1].Position.Should().Be(1);
-        result[1].Title.Should().BeNull();
-        result[1].Name.Should().BeNull();
+        result[1].Title.Should().BeEmpty();
+        result[1].Name.Should().BeEmpty();
         result[2].Path.Should().Be("https://liveaudio.rte.ie/hls-radio/gold/");
         result[2].Id.Should().Be(3);
         result[2].Position.Should().Be(2);
-        result[2].Title.Should().BeNull();
-        result[2].Name.Should().BeNull();
+        result[2].Title.Should().BeEmpty();
+        result[2].Name.Should().BeEmpty();
     }
 }

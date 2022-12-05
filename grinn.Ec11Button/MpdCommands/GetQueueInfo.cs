@@ -43,7 +43,7 @@ public class GetQueueInfo : IMpdCommand<PlayListItem>
 
 public class PlayListItemBuilder
 {
-    private PlayListItem _item;
+    private readonly PlayListItem _item;
 
     private PlayListItemBuilder(PlayListItem item)
     {
@@ -85,11 +85,11 @@ public class PlayListItemBuilder
 
 public class PlayListItem
 {
-    public string Path { get; set; }
+    public string Path { get; set; } = string.Empty;
     public int Id { get; set; }
     public int Position { get; set; }
-    public string Name { get; set; }
-    public string Title { get; set; }
+    public string Name { get; set; } = string.Empty;
+    public string Title { get; set; } = string.Empty;
 
     public override string ToString()
     {
