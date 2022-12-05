@@ -2,11 +2,10 @@
 
 using System.Device.Gpio;
 using System.Device.Spi;
-using System.Drawing;
-using System.Drawing.Imaging;
 using grinn.Ec11Button;
 using grinn.Ec11Button.Hardware;
 using Iot.Device.Spi;
+using SkiaSharp;
 
 Console.WriteLine("Hello, World!");
 
@@ -36,7 +35,7 @@ spiConfig.ClockFrequency = 4000;
 var spiDevice = new SoftwareSpi(displayPinSCK, -1, displayPinMOSI, displayPinCS, spiConfig, gpioController);
 var display = new St7789(240, 240, displayPinDC, displayPinBL, gpioController, spiDevice);
 
-using var bitmap = (Bitmap)Image.FromFile(@"cat.jpg");
+using var bitmap = SKBitmap.Decode(@"cat.jpg");
 
 display.Display(bitmap);
 

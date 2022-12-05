@@ -1,10 +1,9 @@
-﻿using System.Buffers.Binary;
+﻿
 using System.Device.Gpio;
 using System.Device.Spi;
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
-using System.Security.Cryptography.X509Certificates;
+using SkiaSharp;
+
 
 namespace grinn.Ec11Button.Hardware;
 
@@ -150,7 +149,7 @@ public class St7789
         SendCommand(RAMWR);
     }
 
-    public void Display(Bitmap bmp)
+    public void Display(SKBitmap bmp)
     {
         SetWindows();
 
@@ -159,17 +158,15 @@ public class St7789
         SendData(bytes);
     }
 
-    private static byte[] GetBytesForImage(Bitmap bmp)
+    private static byte[] GetBytesForImage(SKBitmap bmp)
     {
-        var rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
-        var rawData = bmp.LockBits(rect, ImageLockMode.ReadOnly, PixelFormat.Format16bppRgb565);
+        IntPtr ptr = bmp.GetPixels();
+        //var rect = new SKRect(0, 0, bmp.Width, bmp.Height);
+        //var rawData = bmp.LockBits(rect, ImageLockMode.ReadOnly, PixelFormat.Format16bppRgb565);
 
-        IntPtr ptr = rawData.Scan0;
-        int bytes = Math.Abs(rawData.Stride) * bmp.Height;
-        var rgbBytes = new byte[bytes];
-        Marshal.Copy(ptr, rgbBytes, 0, bytes);
-        
-        bmp.UnlockBits(rawData);
+        //IntPtr ptr = rawData.Scan0;
+        var rgbBytes = new byte[bmp.ByteCount];
+        Marshal.Copy(ptr, rgbBytes, 0, bmp.ByteCount);
 
         return rgbBytes;
     }
