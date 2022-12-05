@@ -4,7 +4,7 @@ using grinn.Ec11Button.MpdCommands;
 
 namespace grinn.Ec11Button;
 
-public class MpdSocketConnection
+public class MpdSocketConnection : IMpdConnection
 {
     private static readonly byte[] ReceivedBytes = new byte[2048];
     private static readonly char[] ReceivedChars = new char[2048];
@@ -61,4 +61,10 @@ public class MpdSocketConnection
 
         return responseString;
     }
+}
+
+public interface IMpdConnection
+{
+    Task Connect();
+    Task<IList<T>> SendCommandToSocket<T>(IMpdCommand<T> command);
 }

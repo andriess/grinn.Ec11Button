@@ -1,35 +1,38 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
+using System.Device.Gpio;
+using System.Device.Spi;
 using grinn.Ec11Button;
-using grinn.Ec11Button.MpdCommands;
+using grinn.Ec11Button.Hardware;
+using Iot.Device.Spi;
+
 
 Console.WriteLine("Hello, World!");
 
 const int encoderPinA = 17;
 const int encoderPinB = 18;
 const int encoderPinC = 27;
+
+const int displayPinCS = 7;
+const int displayPinSCK = 11;
+const int displayPinMOSI = 10;
+const int displayPinDC = 9;
+const int displayPinBL = 19;
+
+var gpioController = new GpioController();
+
 // My single button code. This should move somewhere smarter once we start orchestrating our gui+controls
-var rotaryButton = new CustomRotaryEncoder(encoderPinA, encoderPinB, encoderPinC, 20);
-rotaryButton.Debounce = TimeSpan.FromMilliseconds(175);
-rotaryButton.OnEncoderChange += HandleEncoderChange;
-rotaryButton.OnClick += HandleClick;
+var rotaryButton = new CustomRotaryEncoder(encoderPinA, encoderPinB, encoderPinC, 20, gpioController);
 
-// Trying some MPD stuff here: 
+// Init MPD connection, this is going to fail fast if it can't connect. Which is fine with me. 
 var mpdConnection = new MpdSocketConnection("/var/run/mpd/socket");
+await mpdConnection.Connect();
 
-var playlistInfo = await mpdConnection.SendCommandToSocket(new GetQueueInfo());
+// Display tests
+var spiConfig = new SpiConnectionSettings(0);
+spiConfig.ClockFrequency = 4000;
 
-foreach (var playListItem in playlistInfo)
-{
-    Console.WriteLine(playListItem.ToString());
-}
+var spiDevice = new SoftwareSpi(displayPinSCK, -1, displayPinMOSI, displayPinCS, spiConfig, gpioController);
+var display = new St7789(240, 240, displayPinDC, displayPinBL, gpioController, spiDevice);
 
-void HandleClick(object? sender, bool args)
-{
-    Console.WriteLine($"{nameof(HandleClick)} - click event arrived in main program.");
-}
-
-void HandleEncoderChange(object? sender, RotaryEncoderDirectionArgs args)
-{
-    Console.WriteLine($"{nameof(HandleEncoderChange)} - {args.Value}");
-}
+await Task.Delay(int.MaxValue);
