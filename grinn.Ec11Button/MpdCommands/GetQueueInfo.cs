@@ -15,14 +15,18 @@ public class GetQueueInfo : IMpdCommand<PlayListItem>
         foreach (var line in lines)
         {
             if (line.Equals("OK"))
+            {
+                // when we reach the OK at the end of the response map whatever is in the dict to a playlistitem.
+                playlistItems.Add(playlistItemBuilder.MapDictToObject(itemDictionary));
                 break;
-            
+            }
+
             var values =  line.Split(":", 2);
 
             // The mpd structure returned is something like this: file, pos, id, .. file, pos, id, ..
             // so I add values to the dictionary until it reaches the second 'file'. Then map it onto
             // a item object.
-            if (itemDictionary.TryAdd(values[0], values[1])) continue;
+            if (itemDictionary.TryAdd(values[0], values[1].Trim())) continue;
                 
             playlistItems.Add(playlistItemBuilder.MapDictToObject(itemDictionary));
 
@@ -66,6 +70,9 @@ public class PlayListItemBuilder
                 case "name":
                     _item.Name = valuePair.Value;
                     break;
+                case "title":
+                    _item.Title = valuePair.Value;
+                    break;
             }
         }
 
@@ -79,9 +86,10 @@ public class PlayListItem
     public int Id { get; set; }
     public int Position { get; set; }
     public string Name { get; set; }
+    public string Title { get; set; }
 
     public override string ToString()
     {
-        return $"{nameof(PlayListItem)} - Path: {Path}, Id: {Id}, Position: {Position}, Name: {Name}";
+        return $"{nameof(PlayListItem)} - Path: {Path}, Id: {Id}, Position: {Position}, Name: {Name}, Title: {Title}";
     }
 }
