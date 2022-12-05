@@ -12,26 +12,29 @@ public class GetQueueInfo : IMpdCommand<PlayListItem>
         var playlistItems = new List<PlayListItem>();
         
         var lines = response.Split("\n");
-        foreach (var line in lines)
+        for(var i = 0; i < lines.Length; i++)
         {
-            if (line.Equals("OK"))
+            if (lines[i].Equals("OK"))
             {
                 // when we reach the OK at the end of the response map whatever is in the dict to a playlistitem.
                 playlistItems.Add(playlistItemBuilder.MapDictToObject(itemDictionary));
                 break;
             }
 
-            var values =  line.Split(":", 2);
+            var values =  lines[i].Split(":", 2);
 
             // The mpd structure returned is something like this: file, pos, id, .. file, pos, id, ..
             // so I add values to the dictionary until it reaches the second 'file'. Then map it onto
             // a item object.
-            if (itemDictionary.TryAdd(values[0], values[1].Trim())) continue;
+            var key = values[0];
+            var value = values[1].Trim();
+            if (itemDictionary.TryAdd(key, value)) continue;
                 
             playlistItems.Add(playlistItemBuilder.MapDictToObject(itemDictionary));
 
             playlistItemBuilder = PlayListItemBuilder.CreateBuilder();
             itemDictionary.Clear();
+            itemDictionary.Add(key, value);
         }
 
         return playlistItems;
