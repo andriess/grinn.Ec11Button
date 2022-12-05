@@ -1,5 +1,10 @@
-﻿using System.Device.Gpio;
+﻿using System.Buffers.Binary;
+using System.Device.Gpio;
 using System.Device.Spi;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.Runtime.InteropServices;
+using System.Security.Cryptography.X509Certificates;
 
 namespace grinn.Ec11Button.Hardware;
 
@@ -71,7 +76,7 @@ public class St7789
             gpioController.OpenPin(backlight.Value, PinMode.Output);
             gpioController.Write(backlight.Value, PinValue.Low);
             Task.Delay(TimeSpan.FromMilliseconds(100));
-            //gpioController.Write(backlight.Value, PinValue.High);
+            gpioController.Write(backlight.Value, PinValue.High);
         }
         
         Init();
@@ -89,7 +94,14 @@ public class St7789
     
     public void SendData(byte data)
     {
-        Send(new [] {data}, true);
+        SendData(new [] {data});
+    }
+
+    public void SendData(int data)
+    {
+        var intBytes = BitConverter.GetBytes(data);
+        
+        SendData(intBytes);
     }
     
     public void SendData(byte[] data)
@@ -110,6 +122,56 @@ public class St7789
         {
             _spi.Write(dataChunk);
         }
+    }
+
+    private void SetWindows(int x0 = 0, int y0 = 0, int x1 = 0, int y1 = 0)
+    {
+        if (x1 == 0)
+        {
+            x1 = _width - 1;
+        }
+
+        if (y1 == 0)
+        {
+            y1 = _height - 1;
+        }
+        
+        SendCommand(CASET);
+        SendData(x0 >> 8);
+        SendData(x0 & 0xFF);
+        SendData(x1 >> 8);
+        SendData(x1 & 0xFF);  
+        
+        SendCommand(RASET);
+        SendData(y0 >> 8);
+        SendData(y0 & 0xFF);
+        SendData(y1 >> 8);
+        SendData(y1 & 0xFF);
+        SendCommand(RAMWR);
+    }
+
+    public void Display(Bitmap bmp)
+    {
+        SetWindows();
+
+        var bytes = GetBytesForImage(bmp);
+        
+        SendData(bytes);
+    }
+
+    private static byte[] GetBytesForImage(Bitmap bmp)
+    {
+        var rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
+        var rawData = bmp.LockBits(rect, ImageLockMode.ReadOnly, PixelFormat.Format16bppRgb565);
+
+        IntPtr ptr = rawData.Scan0;
+        int bytes = Math.Abs(rawData.Stride) * bmp.Height;
+        var rgbBytes = new byte[bytes];
+        Marshal.Copy(ptr, rgbBytes, 0, bytes);
+        
+        bmp.UnlockBits(rawData);
+
+        return rgbBytes;
     }
 
     private void Init()
