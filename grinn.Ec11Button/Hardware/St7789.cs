@@ -243,7 +243,7 @@ public class St7789
         SendData(0x20);
         SendData(0x23);
         
-        SendCommand(DISPOFF);
+        SendCommand(DISPON);
         Task.Delay(TimeSpan.FromMilliseconds(100));
     }
 }
