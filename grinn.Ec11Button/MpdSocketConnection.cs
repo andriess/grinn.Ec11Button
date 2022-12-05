@@ -1,5 +1,6 @@
 ﻿using System.Net.Sockets;
 using System.Text;
+using grinn.Ec11Button.MpdCommands;
 
 namespace grinn.Ec11Button;
 
@@ -28,19 +29,20 @@ public class MpdSocketConnection
         }
     }
     
-    public async Task<string> SendCommandToSocket(string command)
+    public async Task<IList<T>> SendCommandToSocket<T>(IMpdCommand<T> command)
     {
         if (!_socket.Connected)
             await Connect();
         
-        var requestBytes = Encoding.ASCII.GetBytes(command);
+        var requestBytes = Encoding.ASCII.GetBytes($"{command.CommandName}\n");
         var bytesSend = 0;
         while (bytesSend < requestBytes.Length)
         {
             bytesSend += await _socket.SendAsync(requestBytes.AsMemory(bytesSend), SocketFlags.None);
         }
+        var responseString = await ReceiveResponseFromSocket();
 
-        return await ReceiveResponseFromSocket();
+        return command.ParseCommandResponse(responseString);
     }
     
     private async Task<string> ReceiveResponseFromSocket()

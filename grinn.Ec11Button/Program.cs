@@ -1,6 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
 using grinn.Ec11Button;
+using grinn.Ec11Button.MpdCommands;
 
 Console.WriteLine("Hello, World!");
 
@@ -13,12 +14,15 @@ rotaryButton.Debounce = TimeSpan.FromMilliseconds(175);
 rotaryButton.OnEncoderChange += HandleEncoderChange;
 rotaryButton.OnClick += HandleClick;
 
-
 // Trying some MPD stuff here: 
 var mpdConnection = new MpdSocketConnection("/var/run/mpd/socket");
 
-var result = await mpdConnection.SendCommandToSocket("ping\n");
-var playlistInfo = await mpdConnection.SendCommandToSocket("playlistinfo\n");
+var playlistInfo = await mpdConnection.SendCommandToSocket(new GetQueueInfo());
+
+foreach (var playListItem in playlistInfo)
+{
+    Console.WriteLine(playListItem.ToString());
+}
 
 void HandleClick(object? sender, bool args)
 {
