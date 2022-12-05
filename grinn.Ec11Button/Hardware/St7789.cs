@@ -149,26 +149,37 @@ public class St7789
         SendCommand(RAMWR);
     }
 
-    public void Display(SKBitmap bmp)
+    public void Display(SKImage img)
     {
         SetWindows();
 
-        var bytes = GetBytesForImage(bmp);
+        var bytes = GetBytesForImage(img);
+
+        if (bytes.Length == 0)
+            return;
         
         SendData(bytes);
     }
 
-    private static byte[] GetBytesForImage(SKBitmap bmp)
+    private static byte[] GetBytesForImage(SKImage img)
     {
-        IntPtr ptr = bmp.GetPixels();
-        //var rect = new SKRect(0, 0, bmp.Width, bmp.Height);
-        //var rawData = bmp.LockBits(rect, ImageLockMode.ReadOnly, PixelFormat.Format16bppRgb565);
+        var imageInfo = new SKImageInfo(img.Width, img.Height,  SKColorType.Rgb565, img.AlphaType);
+        var bitmap = new SKBitmap(imageInfo);
+        if (img.ReadPixels(imageInfo, bitmap.GetPixels(), imageInfo.RowBytes, 0, 0))
+        {
+            IntPtr ptr = bitmap.GetPixels();
+            var rgbBytes = new byte[bitmap.ByteCount];
+            Marshal.Copy(ptr, rgbBytes, 0, bitmap.ByteCount);
+            
+            Console.Write(rgbBytes);
+            
+            return rgbBytes;
+        }
+        
+        bitmap.Dispose();
+        bitmap = null;
 
-        //IntPtr ptr = rawData.Scan0;
-        var rgbBytes = new byte[bmp.ByteCount];
-        Marshal.Copy(ptr, rgbBytes, 0, bmp.ByteCount);
-
-        return rgbBytes;
+        return Array.Empty<byte>();
     }
 
     private void Init()

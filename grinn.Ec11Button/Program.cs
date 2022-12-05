@@ -36,7 +36,8 @@ var spiDevice = new SoftwareSpi(displayPinSCK, -1, displayPinMOSI, displayPinCS,
 var display = new St7789(240, 240, displayPinDC, displayPinBL, gpioController, spiDevice);
 
 using var bitmap = SKBitmap.Decode(@"cat.jpg");
+var image = SKImage.FromBitmap(bitmap);
 
-display.Display(bitmap);
+display.Display(image);
 
 await Task.Delay(int.MaxValue);
