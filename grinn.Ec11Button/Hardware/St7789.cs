@@ -98,12 +98,12 @@ public class St7789
         _spi.Write(new [] {data});
     }
 
-    public void SendData(int data)
+    /*public void SendData(int data)
     {
         var intBytes = BitConverter.GetBytes(data);
         
         SendData(intBytes);
-    }
+    }*/
     
     public void SendData(byte[] data)
     {
@@ -139,7 +139,7 @@ public class St7789
         }
         
         SendCommand(CASET);
-        SendData(x0 >> 8);
+        /*SendData(x0 >> 8);
         SendData(x0 & 0xFF);
         SendData(x1 >> 8);
         SendData(x1 & 0xFF);  
@@ -148,7 +148,7 @@ public class St7789
         SendData(y0 >> 8);
         SendData(y0 & 0xFF);
         SendData(y1 >> 8);
-        SendData(y1 & 0xFF);
+        SendData(y1 & 0xFF);*/
         SendCommand(RAMWR);
     }
 
