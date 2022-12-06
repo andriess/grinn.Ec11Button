@@ -107,7 +107,7 @@ public class St7789
     
     public void SendData(byte[] data)
     {
-       
+        _gpioController.Write(_dc, PinValue.High);;
         Send(data, true);
     }
     
