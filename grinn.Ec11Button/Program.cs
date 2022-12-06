@@ -38,6 +38,63 @@ var d = SpiDevice.Create(spiConfig);
 gpioController.Write(displayPinDC, PinValue.Low);;
 d.WriteByte(0x01);
 
+gpioController.Write(displayPinDC, PinValue.Low);;
+d.WriteByte(0x36); 
+gpioController.Write(displayPinDC, PinValue.High);;
+d.WriteByte(0x70);
+
+gpioController.Write(displayPinDC, PinValue.Low);;
+d.WriteByte(0x36); // Frame rate ctrl - idle mode
+
+gpioController.Write(displayPinDC, PinValue.High);;
+d.WriteByte(0x0C);
+d.WriteByte(0x0C);
+d.WriteByte(0x00);
+d.WriteByte(0x33);
+d.WriteByte(0x33);
+
+gpioController.Write(displayPinDC, PinValue.Low);;
+d.WriteByte(0x3A);
+
+gpioController.Write(displayPinDC, PinValue.High);;
+d.WriteByte(0x05);
+
+gpioController.Write(displayPinDC, PinValue.Low);;
+d.WriteByte(0xB7);
+gpioController.Write(displayPinDC, PinValue.High);;
+d.WriteByte(0x14);
+
+gpioController.Write(displayPinDC, PinValue.Low);;
+d.WriteByte(0xBB);
+gpioController.Write(displayPinDC, PinValue.High);;
+d.WriteByte(0x37);
+     
+gpioController.Write(displayPinDC, PinValue.Low);;
+d.WriteByte(0xC0); // Power control
+gpioController.Write(displayPinDC, PinValue.High);;
+d.WriteByte(0x2C);
+
+gpioController.Write(displayPinDC, PinValue.Low);;
+d.WriteByte(0xC2); // Power control
+gpioController.Write(displayPinDC, PinValue.High);;
+d.WriteByte(0x01);
+
+gpioController.Write(displayPinDC, PinValue.Low);;
+d.WriteByte(0xC3); // Power control
+gpioController.Write(displayPinDC, PinValue.High);;
+d.WriteByte(0x12);
+
+gpioController.Write(displayPinDC, PinValue.Low);;
+d.WriteByte(0xC4); // Power control
+gpioController.Write(displayPinDC, PinValue.High);;
+d.WriteByte(0x20);
+
+gpioController.Write(displayPinDC, PinValue.Low);;
+d.WriteByte(0xD0);
+gpioController.Write(displayPinDC, PinValue.High);;
+d.WriteByte(0xA4);
+d.WriteByte(0xA1);
+
 
 /*
  *         SendCommand(SWRESET); // Software reset
