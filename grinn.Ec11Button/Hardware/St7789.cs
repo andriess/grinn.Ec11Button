@@ -98,12 +98,15 @@ public class St7789
         _spi.Write(new [] {data});
     }
 
-    /*public void SendData(int data)
+    public void SendData(int data)
     {
         var intBytes = BitConverter.GetBytes(data);
         
+        Console.WriteLine("SendData INT - bytes:");
+        WriteBytesToConsole(intBytes);
+        
         SendData(intBytes);
-    }*/
+    }
     
     public void SendData(byte[] data)
     {
@@ -139,7 +142,7 @@ public class St7789
         }
         
         SendCommand(CASET);
-        /*SendData(x0 >> 8);
+        SendData(x0 >> 8);
         SendData(x0 & 0xFF);
         SendData(x1 >> 8);
         SendData(x1 & 0xFF);  
@@ -148,7 +151,7 @@ public class St7789
         SendData(y0 >> 8);
         SendData(y0 & 0xFF);
         SendData(y1 >> 8);
-        SendData(y1 & 0xFF);*/
+        SendData(y1 & 0xFF);
         SendCommand(RAMWR);
     }
 
@@ -159,9 +162,23 @@ public class St7789
         var bytes = GetBytesForImage(img);
 
         if (bytes.Length == 0)
+        {
+            Console.WriteLine("Bytes from image returned nothing.");
             return;
+        }
+        
+        Console.WriteLine("SendData Display - bytes:");
+        WriteBytesToConsole(bytes);
         
         SendData(bytes);
+    }
+
+    private static void WriteBytesToConsole(byte[] bytes)
+    {
+        foreach (var b in bytes)
+        {
+            Console.WriteLine(b);
+        }
     }
 
     private static byte[] GetBytesForImage(SKImage img)
@@ -173,9 +190,7 @@ public class St7789
             IntPtr ptr = bitmap.GetPixels();
             var rgbBytes = new byte[bitmap.ByteCount];
             Marshal.Copy(ptr, rgbBytes, 0, bitmap.ByteCount);
-            
-            Console.Write(rgbBytes);
-            
+
             return rgbBytes;
         }
         
@@ -191,71 +206,71 @@ public class St7789
         Task.Delay(TimeSpan.FromMilliseconds(150));
         
         SendCommand(MADCTL); 
-        SendData(0x70);
+        SendData((byte)0x70);
         
         SendCommand(FRMCTR2); // Frame rate ctrl - idle mode
-        SendData(0x0C);
-        SendData(0x0C);
-        SendData(0x00);
-        SendData(0x33);
-        SendData(0x33);
+        SendData((byte)0x0C);
+        SendData((byte)0x0C);
+        SendData((byte)0x00);
+        SendData((byte)0x33);
+        SendData((byte)0x33);
         
         SendCommand(COLMOD);
-        SendData(0x05);
+        SendData((byte)0x05);
         
         SendCommand(GCTRL);
-        SendData(0x14);
+        SendData((byte)0x14);
         
         SendCommand(VCOMS);
-        SendData(0x37);
+        SendData((byte)0x37);
         
         SendCommand(LCMCTRL); // Power control
-        SendData(0x2C);
+        SendData((byte)0x2C);
         SendCommand(VDVVRHEN); // Power control
-        SendData(0x01);
+        SendData((byte)0x01);
         SendCommand(VRHS); // Power control
-        SendData(0x12);
+        SendData((byte)0x12);
         SendCommand(VDVS); // Power control
-        SendData(0x20);
+        SendData((byte)0x20);
         
         SendCommand(0xD0);
-        SendData(0xA4);
-        SendData(0xA1);
+        SendData((byte)0xA4);
+        SendData((byte)0xA1);
         
         SendCommand(FRCTRL2);
-        SendData(0x0F);
+        SendData((byte)0x0F);
         
         SendCommand(GMCTRP1); // Set Gamma
-        SendData(0xD0);
-        SendData(0x04);
-        SendData(0x0D);
-        SendData(0x11);
-        SendData(0x13);
-        SendData(0x2B);
-        SendData(0x3F);
-        SendData(0x54);
-        SendData(0x4C);
-        SendData(0x18);
-        SendData(0x0D);
-        SendData(0x0B);
-        SendData(0x1F);
-        SendData(0x23);
+        SendData((byte)0xD0);
+        SendData((byte)0x04);
+        SendData((byte)0x0D);
+        SendData((byte)0x11);
+        SendData((byte)0x13);
+        SendData((byte)0x2B);
+        SendData((byte)0x3F);
+        SendData((byte)0x54);
+        SendData((byte)0x4C);
+        SendData((byte)0x18);
+        SendData((byte)0x0D);
+        SendData((byte)0x0B);
+        SendData((byte)0x1F);
+        SendData((byte)0x23);
         
         SendCommand(GMCTRN1); // Set Gamma
-        SendData(0xD0);
-        SendData(0x04);
-        SendData(0x0C);
-        SendData(0x11);
-        SendData(0x13);
-        SendData(0x2C);
-        SendData(0x3F);
-        SendData(0x44);
-        SendData(0x51);
-        SendData(0x2F);
-        SendData(0x1F);
-        SendData(0x1F);
-        SendData(0x20);
-        SendData(0x23);
+        SendData((byte)0xD0);
+        SendData((byte)0x04);
+        SendData((byte)0x0C);
+        SendData((byte)0x11);
+        SendData((byte)0x13);
+        SendData((byte)0x2C);
+        SendData((byte)0x3F);
+        SendData((byte)0x44);
+        SendData((byte)0x51);
+        SendData((byte)0x2F);
+        SendData((byte)0x1F);
+        SendData((byte)0x1F);
+        SendData((byte)0x20);
+        SendData((byte)0x23);
         
         SendCommand(DISPON);
         Task.Delay(TimeSpan.FromMilliseconds(100));
