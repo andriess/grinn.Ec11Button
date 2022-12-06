@@ -30,18 +30,30 @@ await mpdConnection.Connect();
 
 // Display tests
 var spiConfig = new SpiConnectionSettings(0, 0);
-spiConfig.ClockFrequency = 100_000;
+spiConfig.ClockFrequency = 10_000_000; // 10mhz
 
 var d = SpiDevice.Create(spiConfig);
 
+// write reset command
+gpioController.Write(displayPinDC, PinValue.Low);;
+d.WriteByte(0x01);
 
-var spiDevice = new SoftwareSpi(displayPinSCK, -1, displayPinMOSI, displayPinCS, spiConfig, gpioController);
+
+/*
+ *         SendCommand(SWRESET); // Software reset
+        Task.Delay(TimeSpan.FromMilliseconds(150));
+        
+        SendCommand(MADCTL); 
+        SendData((byte)0x70);
+ */
+
+/*var spiDevice = new SoftwareSpi(displayPinSCK, -1, displayPinMOSI, displayPinCS, spiConfig, gpioController);
 var display = new St7789(240, 240, displayPinDC, displayPinBL, gpioController, d);
 
 using var bitmap = SKBitmap.Decode(@"cat.jpg");
 var image = SKImage.FromBitmap(bitmap);
 
-display.SetWindows();
+display.SetWindows();*/
 //display.Display(image);
 
 await Task.Delay(int.MaxValue);
