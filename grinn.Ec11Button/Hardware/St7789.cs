@@ -129,7 +129,7 @@ public class St7789
         }
     }
 
-    private void SetWindows(int x0 = 0, int y0 = 0, int x1 = 0, int y1 = 0)
+    public void SetWindows(int x0 = 0, int y0 = 0, int x1 = 0, int y1 = 0)
     {
         if (x1 == 0)
         {
