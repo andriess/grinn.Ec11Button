@@ -89,13 +89,13 @@ public class St7789
     public void SendCommand(byte data)
     {
         _gpioController.Write(_dc, PinValue.Low);;
-        _spi.Write(new [] {data});
+        //_spi.Write(new [] {data});
     }
     
     public void SendData(byte data)
     {
         _gpioController.Write(_dc, PinValue.High);;
-        _spi.Write(new [] {data});
+        //_spi.Write(new [] {data});
     }
 
     public void SendData(int data)
@@ -111,7 +111,7 @@ public class St7789
     public void SendData(byte[] data)
     {
         _gpioController.Write(_dc, PinValue.High);;
-        _spi.Write(data);
+        //_spi.Write(data);
     }
     
     private void Send(byte[] data, bool isData, int chunkSize = 4096)
@@ -125,7 +125,7 @@ public class St7789
 
         foreach (var dataChunk in data.Chunk(chunkSize))
         {
-            _spi.Write(dataChunk);
+            //_spi.Write(dataChunk);
         }
     }
 
