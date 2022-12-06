@@ -32,8 +32,11 @@ await mpdConnection.Connect();
 var spiConfig = new SpiConnectionSettings(0, 0);
 spiConfig.ClockFrequency = 100_000;
 
+var d = SpiDevice.Create(spiConfig);
+
+
 var spiDevice = new SoftwareSpi(displayPinSCK, -1, displayPinMOSI, displayPinCS, spiConfig, gpioController);
-var display = new St7789(240, 240, displayPinDC, displayPinBL, gpioController, spiDevice);
+var display = new St7789(240, 240, displayPinDC, displayPinBL, gpioController, d);
 
 using var bitmap = SKBitmap.Decode(@"cat.jpg");
 var image = SKImage.FromBitmap(bitmap);

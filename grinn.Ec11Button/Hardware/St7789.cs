@@ -232,7 +232,6 @@ public class St7789
         SendData((byte)0x12);
         SendCommand(VDVS); // Power control
         SendData((byte)0x20);
-        
         SendCommand(0xD0);
         SendData((byte)0xA4);
         SendData((byte)0xA1);
