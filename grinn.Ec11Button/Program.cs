@@ -29,8 +29,8 @@ var mpdConnection = new MpdSocketConnection("/var/run/mpd/socket");
 await mpdConnection.Connect();
 
 // Display tests
-var spiConfig = new SpiConnectionSettings(1);
-spiConfig.ClockFrequency = 80_000_000;
+var spiConfig = new SpiConnectionSettings(0, 0);
+spiConfig.ClockFrequency = 100_000;
 
 var spiDevice = new SoftwareSpi(displayPinSCK, -1, displayPinMOSI, displayPinCS, spiConfig, gpioController);
 var display = new St7789(240, 240, displayPinDC, displayPinBL, gpioController, spiDevice);
