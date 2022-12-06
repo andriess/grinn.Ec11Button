@@ -88,12 +88,14 @@ public class St7789
     
     public void SendCommand(byte data)
     {
-        SendCommand(new [] {data});
+        _gpioController.Write(_dc, PinValue.Low);;
+        _spi.Write(new [] {data});
     }
     
     public void SendData(byte data)
     {
-        SendData(new [] {data});
+        _gpioController.Write(_dc, PinValue.High);;
+        _spi.Write(new [] {data});
     }
 
     public void SendData(int data)
@@ -105,6 +107,7 @@ public class St7789
     
     public void SendData(byte[] data)
     {
+       
         Send(data, true);
     }
     
@@ -184,10 +187,10 @@ public class St7789
 
     private void Init()
     {
-        SendCommand(SWRESET);
+        SendCommand(SWRESET); // Software reset
         Task.Delay(TimeSpan.FromMilliseconds(150));
         
-        SendCommand(MADCTL); // Software reset
+        SendCommand(MADCTL); 
         SendData(0x70);
         
         SendCommand(FRMCTR2); // Frame rate ctrl - idle mode
