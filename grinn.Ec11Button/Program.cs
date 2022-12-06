@@ -38,6 +38,7 @@ var display = new St7789(240, 240, displayPinDC, displayPinBL, gpioController, s
 using var bitmap = SKBitmap.Decode(@"cat.jpg");
 var image = SKImage.FromBitmap(bitmap);
 
+display.SetWindows();
 //display.Display(image);
 
 await Task.Delay(int.MaxValue);
